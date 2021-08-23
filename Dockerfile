@@ -1,5 +1,5 @@
 # Copied from https://docs.docker.com/language/golang/build-images/ with minor modifications
-FROM golang:1.16-alpine  AS build
+FROM registry.ci.openshift.org/openshift/release:golang-1.16  AS build
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY cmd/ ./cmd
 
 # build all of the binaries and show they were built
 RUN for binary_folder in $(find cmd -maxdepth 1 -mindepth 1); do \
-		CGO_ENABLED=0 go build -o $(basename $binary_folder) $binary_folder/*; \
+		GOFLAGS= CGO_ENABLED=0 go build -o $(basename $binary_folder) $binary_folder/*; \
 	done ; \
 	find . -type f -executable
 ##
